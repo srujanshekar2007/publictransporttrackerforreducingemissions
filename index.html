@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Transport Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Welcome Page -->
+    <div id="welcomePage" class="page active">
+        <div class="welcome-container">
+            <div class="floating-logo">🚌</div>
+            <div class="hero-content">
+                <h1 class="hero-title">Public Transport Tracker</h1>
+                <p class="hero-subtitle">
+                    Plan smarter journeys with live schedules and real-time emission insights
+                </p>
+                <div class="btn-center-wrapper">
+                    <button class="primary-gradient-btn" onclick="showPage('mapPage')">
+                        <span>🚀 Start Planning</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Page -->
+    <div id="mapPage" class="page">
+        <div class="glass-card map-container">
+            <div class="page-header">
+                <h1 class="modern-title">Plan Your Journey</h1>
+                <p class="section-subtitle">Select cities to view bus schedules & emissions</p>
+            </div>
+            
+            <div class="city-selector modern-selectors">
+                <div class="selector-group glass-input-group">
+                    <label>🟢 From</label>
+                    <select id="sourceCity" class="glass-select">
+                        <option value="">Choose city</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Ahmedabad">Ahmedabad</option>
+                        <option value="Jaipur">Jaipur</option>
+                    </select>
+                </div>
+                
+                <div class="selector-group glass-input-group">
+                    <label>🔴 To</label>
+                    <select id="destCity" class="glass-select">
+                        <option value="">Choose city</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Ahmedabad">Ahmedabad</option>
+                        <option value="Jaipur">Jaipur</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="btn-center-wrapper">
+                <button class="cta-gradient-btn" id="calculateBtn" onclick="calculateJourney()" disabled>
+                    <span>Check Buses & Emissions</span>
+                    <div class="btn-shimmer"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Page -->
+    <div id="resultsPage" class="page">
+        <div class="glass-card results-container">
+            <div class="page-header">
+                <h1 id="routeTitle" class="modern-title">Journey Results</h1>
+            </div>
+            
+            <div class="bus-schedule-section">
+                <h2 class="section-title">🚌 Live Bus Schedules</h2>
+                <div id="busSchedule" class="modern-bus-grid"></div>
+            </div>
+            
+            <div class="emissions-comparison">
+                <div class="distance-metric" id="distanceDisplay">0 km</div>
+                
+                <div class="modern-comparison-grid">
+                    <div class="metric-card green-metric">
+                        <div class="metric-icon">🚌</div>
+                        <div class="metric-value" id="publicCO2">0 kg</div>
+                        <div class="metric-label">Bus CO₂</div>
+                    </div>
+                    
+                    <div class="savings-badge modern-badge">
+                        <div class="badge-glow">🎉</div>
+                        <div class="savings-value" id="savings">0%</div>
+                        <span>Saved</span>
+                    </div>
+                    
+                    <div class="metric-card red-metric">
+                        <div class="metric-icon">🚗</div>
+                        <div class="metric-value" id="privateCO2">0 kg</div>
+                        <div class="metric-label">Car CO₂</div>
+                    </div>
+                </div>
+                
+                <div class="impact-metrics">
+                    <div class="impact-item">
+                        <div class="impact-icon">🌳</div>
+                        <span class="impact-label">Trees Saved</span>
+                        <span id="treesSaved" class="impact-value">0</span>
+                    </div>
+                    <div class="impact-item">
+                        <div class="impact-icon">⏱️</div>
+                        <span class="impact-label">Travel Time</span>
+                        <span id="travelTime" class="impact-value">0h</span>
+                    </div>
+                </div>
+
+                <div class="btn-center-wrapper">
+                    <button class="info-btn" onclick="showCalculationInfo()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 16v-4m0-4h.01"/>
+                        </svg>
+                        How is this calculated?
+                    </button>
+                </div>
+            </div>
+            
+            <div class="btn-center-wrapper">
+                <button class="cta-gradient-btn" onclick="showPage('promotionPage')">
+                    <span>Discover Benefits</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calculation Modal -->
+    <div id="calcModal" class="modern-modal">
+        <div class="modal-content modern-modal-content">
+            <div class="modal-header">
+                <h2>Calculation Methodology</h2>
+                <button class="close-btn" onclick="closeCalculationInfo()">&times;</button>
+            </div>
+            <div class="modal-body modern-modal-body">
+                <div class="calc-grid">
+                    <div class="calc-item">
+                        <h3>Formula</h3>
+                        <div class="formula-display">
+                            CO₂ = Distance × Emission Factor
+                        </div>
+                    </div>
+                    <div class="calc-item">
+                        <div class="emission-factor">
+                            <span class="factor-label">🚌 Bus:</span>
+                            <span class="factor-value">0.08kg/km</span>
+                        </div>
+                        <div class="emission-factor">
+                            <span class="factor-label">🚗 Car:</span>
+                            <span class="factor-value">0.19kg/km</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="calc-explanation">
+                    <p>• Bus: Per passenger (40 seats/bus)</p>
+                    <p>• Car: Per passenger (avg 2 passengers)</p>
+                    <p>• Trees: 1 tree = 20kg CO₂/year</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Promotion Page -->
+    <div id="promotionPage" class="page">
+        <div class="glass-card promotion-container">
+            <div class="hero-section">
+                <h1 class="hero-title modern-hero">Why Choose Buses?</h1>
+                <p class="hero-subtitle">Sustainable, reliable, and future-proof travel</p>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌿</div>
+                    <h3>76% Less Emissions</h3>
+                    <p>Significantly lower carbon footprint</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚌</div>
+                    <h3>24/7 Schedules</h3>
+                    <p>Multiple daily departures</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Stress-Free Travel</h3>
+                    <p>No traffic, no parking hassles</p>
+                </div>
+            </div>
+            
+            <div class="cta-section modern-cta">
+                <div class="btn-center-wrapper">
+                    <h2>Travel Green Today</h2>
+                    <button class="primary-gradient-btn" onclick="showPage('mapPage')">
+                        Plan Next Journey
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+  <a
+    href="https://docs.google.com/forms/d/e/1FAIpQLSfIRO5TBoNMFrUJivc6BQGSLU-_P1FMQLt3BBGF8jWqh_t5sw/viewform?usp=sharing"
+    target="_blank"
+    class="contact-btn">
+    Contact Us
+  </a>
+
+  <p class="footer-text">
+    © 2026 Public Transport Tracker | Sustainable Mobility Initiative
+  </p>
+</footer>
+
